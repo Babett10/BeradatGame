@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEditor;
 using TMPro;
 
 public class UIManager : MonoBehaviour
@@ -72,7 +74,7 @@ public class UIManager : MonoBehaviour
 
     private void CreateInstance()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -101,5 +103,15 @@ public class UIManager : MonoBehaviour
     {
         registrationPanel.SetActive(true);
         loginPanel.SetActive(false);
+    }
+
+    public void QuitApplication()
+    {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+        Debug.Log("Application Exit");
     }
 }
