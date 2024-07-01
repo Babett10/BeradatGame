@@ -15,7 +15,7 @@ public class Finish : MonoBehaviour
         finishSound = GetComponent<AudioSource>();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) 
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.name == "Player")
         {
@@ -27,9 +27,10 @@ public class Finish : MonoBehaviour
     IEnumerator CompleteLevel()
     {
         yield return new WaitForSeconds(0.5f);
-        WinPanel.SetActive(true);    
-        orangeText.SetActive(false);     
+        Time.timeScale = 0f;
+        WinPanel.SetActive(true);
+        orangeText.SetActive(false);
     }
 
-    
+
 }

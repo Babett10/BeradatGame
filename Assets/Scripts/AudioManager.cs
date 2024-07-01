@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 
 public class AudioManager : MonoBehaviour
-{   
+{
     public Slider SFXSlider;
     public Slider BGMSlider;
     public AudioMixer mixer;
@@ -16,35 +16,62 @@ public class AudioManager : MonoBehaviour
 
     public void Start()
     {
-        float db;
+        if (PlayerPrefs.HasKey("musicVolume"))
+        {
+            LoadVolume();
+        }
+        else
+        {
+            SetMusicVolume();
+            SetSFXVolume();
+        }
 
-        if (mixer.GetFloat("SFX_VOL", out db))
-            SFXSlider.value = (db+80)/80;
+    }
 
-        if (mixer.GetFloat("BGM_VOL", out db))
-            SFXSlider.value = (db+80)/80;
+    //BGM & SFX slider
+    public void SetMusicVolume()
+    {
+        float volume = BGMSlider.value;
+        mixer.SetFloat("BGM_VOL", Mathf.Log10(volume) * 20);
+        PlayerPrefs.SetFloat("musicVolume", volume);
+    }
 
+    public void SetSFXVolume()
+    {
+        float volume = SFXSlider.value;
+        mixer.SetFloat("SFX_VOL", Mathf.Log10(volume) * 20);
+        PlayerPrefs.SetFloat("SFXVolume", volume);
+    }
+
+    private void LoadVolume()
+    {
+        BGMSlider.value = PlayerPrefs.GetFloat("musicVolume");
+        SFXSlider.value = PlayerPrefs.GetFloat("SFXVolume");
+        SetMusicVolume();
+        SetSFXVolume();
+    }
+
+    public void ButtonSFX()
+    {
+        Sfx.Play();
     }
 
     //SFX slider
     public void SFXVolume(float value)
     {
-       value = value*80 - 80;
+        value = value * 80 - 80;
 
-       mixer.SetFloat("SFX_VOL",value);
+        mixer.SetFloat("SFX_VOL", value);
     }
-
-    
-
 
     //BGM slider
     public void BGMVolume(float value)
     {
-       value = value*80 - 80;
+        value = value * 80 - 80;
 
-       mixer.SetFloat("BGM_VOL",value);
+        mixer.SetFloat("BGM_VOL", value);
     }
 
 }
 
-    
+

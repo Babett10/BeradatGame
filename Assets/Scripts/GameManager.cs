@@ -17,10 +17,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        int totalOrange = PlayerPrefs.GetInt("TotalOranges", 0); 
+        int totalOrange = PlayerPrefs.GetInt("TotalOranges", 0);
         wintotalOrangesText.text = "Total Oranges : " + totalOrange;
         losetotalOrangesText.text = "Total Oranges : " + totalOrange;
-       
+
     }
 
     private void Update()
@@ -48,7 +48,15 @@ public class GameManager : MonoBehaviour
         // Tambahkan logika lain yang relevan saat permainan di-pause
     }
 
-     public void ResumeGame()
+    public void OpenPauseSetting()
+    {
+        if (!isPaused)
+        {
+            Pause();
+        }
+    }
+
+    public void ResumeGame()
     {
         Time.timeScale = 1f;
         isPaused = false;
@@ -68,13 +76,13 @@ public class GameManager : MonoBehaviour
     public void mainMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(0);
     }
 
     public void NextLevel()
     {
         Time.timeScale = 1f;
-       SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
 

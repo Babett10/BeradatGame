@@ -11,6 +11,7 @@ public class itemCollector : MonoBehaviour
     public AudioClip collectClip;
 
     public PlayerMovement player;
+    public GameObject QuizPanel;
 
     [SerializeField] private Text orangesText;
 
@@ -21,10 +22,16 @@ public class itemCollector : MonoBehaviour
             Destroy(collision.gameObject);
             Oranges++;
             orangesText.text = "Oranges: " + Oranges;
-            Debug.Log ("jeruk = " + Oranges);
+            Debug.Log("jeruk = " + Oranges);
             PlayerPrefs.SetInt("TotalOranges", Oranges); //menyimpan jeruk yang sudah di collect ke dalam PlayerPrefs
             source.PlayOneShot(collectClip);
         }
+
+        if (collision.gameObject.CompareTag("SignQuiz"))
+        {
+            QuizPanel.transform.GetChild(collision.transform.GetSiblingIndex()).gameObject.SetActive(true);
+            collision.gameObject.SetActive(false);
+        }
     }
-    
+
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -104,6 +105,18 @@ public class UIManager : MonoBehaviour
         registrationPanel.SetActive(true);
         loginPanel.SetActive(false);
     }
+
+    public void ButtonInGame()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    public void ButtonBackToMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+
 
     public void QuitApplication()
     {

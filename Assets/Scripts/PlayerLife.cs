@@ -34,15 +34,15 @@ public class PlayerLife : MonoBehaviour
         anim.SetTrigger("death"); // animasi death
         source.PlayOneShot(dieClip);
         StartCoroutine(LoseScreen());
-        
-        
+
+
     }
 
     IEnumerator LoseScreen()
     {
         yield return new WaitForSeconds(1);
-        LosePanel.SetActive(true);    
-        orangeText.SetActive(false);     
+        LosePanel.SetActive(true);
+        orangeText.SetActive(false);
     }
 
 }
