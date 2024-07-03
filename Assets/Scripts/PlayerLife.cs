@@ -10,6 +10,8 @@ public class PlayerLife : MonoBehaviour
     public GameObject LosePanel;
     public GameObject orangeText;
 
+    public PlayerMovement playerMovement;
+
     public AudioSource source;
     public AudioClip dieClip;
 
@@ -33,6 +35,7 @@ public class PlayerLife : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Static;
         anim.SetTrigger("death"); // animasi death
         source.PlayOneShot(dieClip);
+        playerMovement.setAliveStatus(false);
         StartCoroutine(LoseScreen());
 
 

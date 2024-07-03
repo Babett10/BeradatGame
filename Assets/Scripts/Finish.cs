@@ -10,6 +10,8 @@ public class Finish : MonoBehaviour
     public GameObject WinPanel;
     public GameObject orangeText;
 
+    public PlayerMovement playerMovement;
+
     void Start()
     {
         finishSound = GetComponent<AudioSource>();
@@ -27,7 +29,7 @@ public class Finish : MonoBehaviour
     IEnumerator CompleteLevel()
     {
         yield return new WaitForSeconds(0.5f);
-        Time.timeScale = 0f;
+        playerMovement.setWinStatus(true);
         WinPanel.SetActive(true);
         orangeText.SetActive(false);
     }

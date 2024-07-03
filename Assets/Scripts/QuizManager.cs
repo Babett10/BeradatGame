@@ -6,11 +6,13 @@ using UnityEngine.UI;
 
 public class QuizManager : MonoBehaviour
 {
+    public AudioSource quizBenar, quizSalah;
     public TMP_Text skor_T, terjawab_T;
-    public GameObject FeedbackQuizBenar, FeedbackQuizSalah;
+    public GameObject FeedbackQuizBenar, FeedbackQuizSalah, FeedbackGambarBenar, FeedBackGambarSalah;
 
-    int skor = 0, quizterjawab = 0;
-
+    public int skor = 0, quizterjawab = 0;
+    public enum QuizType { PilihanGanda, TebakGambar }
+    public QuizType[] quizTypes;
 
     public string[] kunciJawaban;
 
@@ -34,12 +36,28 @@ public class QuizManager : MonoBehaviour
         }
         if (tombol.name == kunciJawaban[Nomor()])
         {
+            quizBenar.Play();
             FeedbackQuizBenar.SetActive(true);
             skor += 20;
 
         }
+        else if (quizTypes[Nomor()] == QuizType.TebakGambar)
+        {
+            if (tombol.name == kunciJawaban[Nomor()])
+            {
+                quizBenar.Play();
+                FeedbackGambarBenar.SetActive(true);
+                skor += 20;
+            }
+            else
+            {
+                quizSalah.Play();
+                FeedBackGambarSalah.SetActive(true);
+            }
+        }
         else
         {
+            quizSalah.Play();
             FeedbackQuizSalah.SetActive(true);
         }
         quizterjawab++;
@@ -51,6 +69,8 @@ public class QuizManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         FeedbackQuizBenar.SetActive(false);
         FeedbackQuizSalah.SetActive(false);
+        FeedbackGambarBenar.SetActive(false);
+        FeedBackGambarSalah.SetActive(false);
         transform.GetChild(Nomor()).gameObject.SetActive(false);
     }
 

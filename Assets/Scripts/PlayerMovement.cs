@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
     private int maxJumps = 2; //max lompat
     private int _jumping;
     private float moveInput;
+    private bool isAlive = true;
+    private bool isPaused, infoActive, isWin = false;
 
     public GameObject QuizPanel;
     public AudioSource source;
@@ -39,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (IsQuizPanelActive()) return;
+        if (!isAlive || isPaused || infoActive || isWin || IsQuizPanelActive()) return;
 
         if (IsGrounded() && rb.velocity.y <= 0)
         {
@@ -68,6 +70,27 @@ public class PlayerMovement : MonoBehaviour
     public void startSound()
     {
         source.PlayOneShot(startClip);
+    }
+
+    public void setAliveStatus(bool status)
+    {
+        isAlive = status;
+    }
+
+    public void setPausedStatus(bool status)
+    {
+
+        isPaused = status;
+    }
+
+    public void infoPanelActive(bool status)
+    {
+        infoActive = status;
+    }
+
+    public void setWinStatus(bool status)
+    {
+        isWin = status;
     }
 
     private void UpdateAnimationState() //Animasi
