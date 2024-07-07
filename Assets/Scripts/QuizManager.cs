@@ -66,7 +66,7 @@ public class QuizManager : MonoBehaviour
 
     IEnumerator tutupQuiz()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.7f);
         FeedbackQuizBenar.SetActive(false);
         FeedbackQuizSalah.SetActive(false);
         FeedbackGambarBenar.SetActive(false);

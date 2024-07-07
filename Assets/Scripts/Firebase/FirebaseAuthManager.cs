@@ -3,17 +3,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using Firebase;
 using Firebase.Auth;
+using Firebase.Database;
 using Unity.VisualScripting;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
-   // Firebase variable
+    // Firebase variable
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
     public FirebaseAuth auth;
     public static FirebaseUser user;
-
-    
+    public DatabaseReference databaseReference;
 
     // Login Variables
     [Space]
@@ -30,35 +30,36 @@ public class FirebaseAuthManager : MonoBehaviour
     public InputField confirmPasswordRegisterField;
 
 
-    private void Start() 
+    private void Start()
     {
-        StartCoroutine(CheckAndFixDependenciesAsync());   
+        StartCoroutine(CheckAndFixDependenciesAsync());
     }
 
     private IEnumerator CheckAndFixDependenciesAsync()
     {
         var dependencyTask = FirebaseApp.CheckAndFixDependenciesAsync();
 
-        yield return new WaitUntil(()=> dependencyTask.IsCompleted);
+        yield return new WaitUntil(() => dependencyTask.IsCompleted);
 
         dependencyStatus = dependencyTask.Result;
 
-            if (dependencyStatus == DependencyStatus.Available)
-            {
-                InitializeFirebase();
-                yield return new WaitForEndOfFrame();
-                StartCoroutine(CheckForAutoLogin());
-            }
-            else
-            {
-                Debug.LogError("Could not resolve all firebase dependencies: " + dependencyStatus);
-            }
+        if (dependencyStatus == DependencyStatus.Available)
+        {
+            InitializeFirebase();
+            yield return new WaitForEndOfFrame();
+            StartCoroutine(CheckForAutoLogin());
+        }
+        else
+        {
+            Debug.LogError("Could not resolve all firebase dependencies: " + dependencyStatus);
+        }
     }
 
     void InitializeFirebase()
     {
         //Set the default instance object
         auth = FirebaseAuth.DefaultInstance;
+        databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
 
         auth.StateChanged += AuthStateChanged;
         AuthStateChanged(this, null);
@@ -70,7 +71,7 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             var reloadUserTask = user.ReloadAsync();
 
-            yield return new WaitUntil(()=> reloadUserTask.IsCompleted);
+            yield return new WaitUntil(() => reloadUserTask.IsCompleted);
 
             AutoLogin();
         }
@@ -92,7 +93,7 @@ public class FirebaseAuthManager : MonoBehaviour
             UIManager.Instance.OpenAuthPanel();
         }
     }
-    
+
 
     // Track state changes of the auth object.
     void AuthStateChanged(object sender, System.EventArgs eventArgs)
@@ -177,12 +178,13 @@ public class FirebaseAuthManager : MonoBehaviour
         else
         {
             AuthResult authResult = loginTask.Result;
-            user = authResult.User; 
-          
+            user = authResult.User;
+
 
             Debug.LogFormat("{0} You Are Successfully Logged In", user.DisplayName);
 
             References.userName = user.DisplayName;
+            SaveUserData(user.UserId, user.DisplayName, user.Email);
             UIManager.Instance.OpenMainMenuPanel();
         }
     }
@@ -245,18 +247,18 @@ public class FirebaseAuthManager : MonoBehaviour
             {
                 // Get The User After Registration Success
                 AuthResult authResult = registerTask.Result;
-                FirebaseUser user = authResult.User;
+                FirebaseUser newUser = authResult.User;
 
                 UserProfile userProfile = new UserProfile { DisplayName = name };
 
-                var updateProfileTask = user.UpdateUserProfileAsync(userProfile);
+                var updateProfileTask = newUser.UpdateUserProfileAsync(userProfile);
 
                 yield return new WaitUntil(() => updateProfileTask.IsCompleted);
 
                 if (updateProfileTask.Exception != null)
                 {
                     // Delete the user if user update failed
-                    user.DeleteAsync();
+                    newUser.DeleteAsync();
 
                     Debug.LogError(updateProfileTask.Exception);
 
@@ -288,11 +290,41 @@ public class FirebaseAuthManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Registration Sucessful Welcome " + user.DisplayName);
+                    Debug.Log("Registration Sucessful Welcome " + newUser.DisplayName);
+                    SaveUserData(newUser.UserId, newUser.DisplayName, newUser.Email);
                     UIManager.Instance.OpenLoginPanel();
                 }
             }
         }
     }
 
+    private void SaveUserData(string userId, string userName, string userEmail)
+    {
+        User newUser = new User(userName, userEmail);
+        string json = JsonUtility.ToJson(newUser);
+
+        databaseReference.Child("users").Child(userId).SetRawJsonValueAsync(json).ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("User data saved successfully.");
+            }
+            else
+            {
+                Debug.LogError("Failed to save user data : " + task.Exception);
+            }
+        });
+    }
+}
+[System.Serializable]
+public class User
+{
+    public string userName;
+    public string userEmail;
+
+    public User(string userName, string userEmail)
+    {
+        this.userName = userName;
+        this.userEmail = userEmail;
+    }
 }

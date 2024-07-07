@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/firebase_database_url,@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id">
-  <string name="firebase_database_url" translatable="false">null</string>
+  <string name="firebase_database_url" translatable="false">https://gamepakaianadat-default-rtdb.asia-southeast1.firebasedatabase.app</string>
   <string name="gcm_defaultSenderId" translatable="false">368919189519</string>
   <string name="google_storage_bucket" translatable="false">gamepakaianadat.appspot.com</string>
   <string name="project_id" translatable="false">gamepakaianadat</string>
   <string name="google_api_key" translatable="false">AIzaSyBW_mTcai2xFO0uD3v5Sisgn7O4kjqOKzg</string>
   <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBW_mTcai2xFO0uD3v5Sisgn7O4kjqOKzg</string>
-  <string name="google_app_id" translatable="false">1:368919189519:android:025ae29a3b36ea17bfab7a</string>
+  <string name="google_app_id" translatable="false">1:368919189519:android:69340a55bc1615d9bfab7a</string>
 </resources>
