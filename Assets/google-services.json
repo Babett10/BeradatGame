@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "firebase_url" : "null",
+    "project_number": "368919189519",
+    "project_id": "gamepakaianadat",
+    "storage_bucket": "gamepakaianadat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368919189519:android:025ae29a3b36ea17bfab7a",
+        "android_client_info": {
+          "package_name": "com.Babaqi.GamePA"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBW_mTcai2xFO0uD3v5Sisgn7O4kjqOKzg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
