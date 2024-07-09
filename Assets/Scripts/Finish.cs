@@ -8,7 +8,6 @@ public class Finish : MonoBehaviour
 {
     private AudioSource finishSound;
     public GameObject WinPanel;
-    public GameObject orangeText;
 
     public PlayerMovement playerMovement;
 
@@ -31,7 +30,6 @@ public class Finish : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         playerMovement.setWinStatus(true);
         WinPanel.SetActive(true);
-        orangeText.SetActive(false);
     }
 
 
