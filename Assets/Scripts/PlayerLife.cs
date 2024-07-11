@@ -8,7 +8,6 @@ public class PlayerLife : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
     public GameObject LosePanel;
-    public GameObject orangeText;
 
     public PlayerMovement playerMovement;
 
@@ -45,7 +44,6 @@ public class PlayerLife : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         LosePanel.SetActive(true);
-        orangeText.SetActive(false);
     }
 
 }

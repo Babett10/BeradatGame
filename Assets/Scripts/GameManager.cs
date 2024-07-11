@@ -9,20 +9,17 @@ public class GameManager : MonoBehaviour
 {
     private bool isPaused = false;
     public GameObject pausePanel;
-    public GameObject orangeText;
+    // public GameObject orangeText;
 
     public PlayerMovement playerMovement;
 
 
-    [SerializeField] Text wintotalOrangesText;
-    [SerializeField] Text losetotalOrangesText;
+    // [SerializeField] Text wintotalOrangesText;
+    // [SerializeField] Text losetotalOrangesText;
 
 
     private void Start()
     {
-        int totalOrange = PlayerPrefs.GetInt("TotalOranges", 0);
-        wintotalOrangesText.text = "Total Oranges : " + totalOrange;
-        losetotalOrangesText.text = "Total Oranges : " + totalOrange;
 
     }
 
@@ -47,7 +44,7 @@ public class GameManager : MonoBehaviour
         isPaused = true;
         playerMovement.setPausedStatus(true);
         pausePanel.SetActive(true);
-        orangeText.SetActive(false); // Aktifkan panel pause
+        // orangeText.SetActive(false); // Aktifkan panel pause
         // Tambahkan logika lain yang relevan saat permainan di-pause
     }
 
@@ -71,7 +68,7 @@ public class GameManager : MonoBehaviour
         isPaused = false;
         playerMovement.setPausedStatus(false);
         pausePanel.SetActive(false);
-        orangeText.SetActive(true); // Nonaktifkan panel pause
+        // orangeText.SetActive(true); // Nonaktifkan panel pause
         // Tambahkan logika lain yang relevan saat permainan dilanjutkan
     }
 

@@ -106,9 +106,24 @@ public class UIManager : MonoBehaviour
         loginPanel.SetActive(false);
     }
 
-    public void ButtonInGame()
+    public void ButtonStage1()
     {
         SceneManager.LoadScene(1);
+    }
+
+    public void ButtonStage2()
+    {
+        SceneManager.LoadScene(2);
+    }
+
+    public void ButtonStage3()
+    {
+        SceneManager.LoadScene(3);
+    }
+
+    public void ButtonStage4()
+    {
+        SceneManager.LoadScene(4);
     }
 
     public void ButtonBackToMainMenu()

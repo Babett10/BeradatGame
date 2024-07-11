@@ -5,6 +5,7 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using Unity.VisualScripting;
+using TMPro;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
@@ -28,6 +29,15 @@ public class FirebaseAuthManager : MonoBehaviour
     public InputField emailRegisterField;
     public InputField passwordRegisterField;
     public InputField confirmPasswordRegisterField;
+
+    [Header("UI")]
+    public GameObject loginFailedPanel;
+    public GameObject registrationSuccess;
+    public GameObject registFailedPanel;
+    public TMP_Text loginFailedText;
+    public TMP_Text registrationSuccessText;
+    public TMP_Text registFailedText;
+
 
 
     private void Start()
@@ -174,6 +184,7 @@ public class FirebaseAuthManager : MonoBehaviour
             }
 
             Debug.Log(failedMessage);
+            ShowLoginFailedPanel(failedMessage);
         }
         else
         {
@@ -191,37 +202,92 @@ public class FirebaseAuthManager : MonoBehaviour
 
     public void Register()
     {
-        StartCoroutine(RegisterAsync(nameRegisterField.text, emailRegisterField.text, passwordRegisterField.text, confirmPasswordRegisterField.text));
+        if (string.IsNullOrEmpty(nameRegisterField.text))
+        {
+            ShowRegistFailedPanel("User Name is empty");
+            return;
+        }
+        else if (string.IsNullOrEmpty(emailRegisterField.text))
+        {
+            ShowRegistFailedPanel("Email field is empty");
+            return;
+        }
+        else if (string.IsNullOrEmpty(passwordRegisterField.text))
+        {
+            ShowRegistFailedPanel("Password field is empty");
+            return;
+        }
+        else if (passwordRegisterField.text != confirmPasswordRegisterField.text)
+        {
+            ShowRegistFailedPanel("Password does not match");
+            return;
+        }
+        else
+        {
+            StartCoroutine(RegisterAsync(nameRegisterField.text, emailRegisterField.text, passwordRegisterField.text, confirmPasswordRegisterField.text));
+        }
     }
 
     private IEnumerator RegisterAsync(string name, string email, string password, string confirmPassword)
     {
-        if (name == "")
+        var registerTask = auth.CreateUserWithEmailAndPasswordAsync(email, password);
+
+        yield return new WaitUntil(() => registerTask.IsCompleted);
+
+        if (registerTask.Exception != null)
         {
-            Debug.LogError("User Name is empty");
-        }
-        else if (email == "")
-        {
-            Debug.LogError("email field is empty");
-        }
-        else if (passwordRegisterField.text != confirmPasswordRegisterField.text)
-        {
-            Debug.LogError("Password does not match");
+            Debug.LogError(registerTask.Exception);
+
+            FirebaseException firebaseException = registerTask.Exception.GetBaseException() as FirebaseException;
+            AuthError authError = (AuthError)firebaseException.ErrorCode;
+
+            string failedMessage = "Registration Failed! Becuase ";
+            switch (authError)
+            {
+                case AuthError.InvalidEmail:
+                    failedMessage += "Email is invalid";
+                    break;
+                case AuthError.WrongPassword:
+                    failedMessage += "Wrong Password";
+                    break;
+                case AuthError.MissingEmail:
+                    failedMessage += "Email is missing";
+                    break;
+                case AuthError.MissingPassword:
+                    failedMessage += "Password is missing";
+                    break;
+                default:
+                    failedMessage = "Registration Failed";
+                    break;
+            }
+
+            ShowRegistFailedPanel(failedMessage);
+            Debug.Log(failedMessage);
         }
         else
         {
-            var registerTask = auth.CreateUserWithEmailAndPasswordAsync(email, password);
+            // Get The User After Registration Success
+            AuthResult authResult = registerTask.Result;
+            FirebaseUser newUser = authResult.User;
 
-            yield return new WaitUntil(() => registerTask.IsCompleted);
+            UserProfile userProfile = new UserProfile { DisplayName = name };
 
-            if (registerTask.Exception != null)
+            var updateProfileTask = newUser.UpdateUserProfileAsync(userProfile);
+
+            yield return new WaitUntil(() => updateProfileTask.IsCompleted);
+
+            if (updateProfileTask.Exception != null)
             {
-                Debug.LogError(registerTask.Exception);
+                // Delete the user if user update failed
+                newUser.DeleteAsync();
 
-                FirebaseException firebaseException = registerTask.Exception.GetBaseException() as FirebaseException;
+                Debug.LogError(updateProfileTask.Exception);
+
+                FirebaseException firebaseException = updateProfileTask.Exception.GetBaseException() as FirebaseException;
                 AuthError authError = (AuthError)firebaseException.ErrorCode;
 
-                string failedMessage = "Registration Failed! Becuase ";
+
+                string failedMessage = "Profile update Failed! Becuase ";
                 switch (authError)
                 {
                     case AuthError.InvalidEmail:
@@ -237,65 +303,66 @@ public class FirebaseAuthManager : MonoBehaviour
                         failedMessage += "Password is missing";
                         break;
                     default:
-                        failedMessage = "Registration Failed";
+                        failedMessage = "Profile update Failed";
                         break;
                 }
 
                 Debug.Log(failedMessage);
+                ShowRegistFailedPanel(failedMessage);
             }
             else
             {
-                // Get The User After Registration Success
-                AuthResult authResult = registerTask.Result;
-                FirebaseUser newUser = authResult.User;
-
-                UserProfile userProfile = new UserProfile { DisplayName = name };
-
-                var updateProfileTask = newUser.UpdateUserProfileAsync(userProfile);
-
-                yield return new WaitUntil(() => updateProfileTask.IsCompleted);
-
-                if (updateProfileTask.Exception != null)
-                {
-                    // Delete the user if user update failed
-                    newUser.DeleteAsync();
-
-                    Debug.LogError(updateProfileTask.Exception);
-
-                    FirebaseException firebaseException = updateProfileTask.Exception.GetBaseException() as FirebaseException;
-                    AuthError authError = (AuthError)firebaseException.ErrorCode;
-
-
-                    string failedMessage = "Profile update Failed! Becuase ";
-                    switch (authError)
-                    {
-                        case AuthError.InvalidEmail:
-                            failedMessage += "Email is invalid";
-                            break;
-                        case AuthError.WrongPassword:
-                            failedMessage += "Wrong Password";
-                            break;
-                        case AuthError.MissingEmail:
-                            failedMessage += "Email is missing";
-                            break;
-                        case AuthError.MissingPassword:
-                            failedMessage += "Password is missing";
-                            break;
-                        default:
-                            failedMessage = "Profile update Failed";
-                            break;
-                    }
-
-                    Debug.Log(failedMessage);
-                }
-                else
-                {
-                    Debug.Log("Registration Sucessful Welcome " + newUser.DisplayName);
-                    SaveUserData(newUser.UserId, newUser.DisplayName, newUser.Email);
-                    UIManager.Instance.OpenLoginPanel();
-                }
+                Debug.Log("Registration Sucessful Welcome " + newUser.DisplayName);
+                ShowRegistrationSuccessPanel(newUser.DisplayName);
+                SaveUserData(newUser.UserId, newUser.DisplayName, newUser.Email);
+                UIManager.Instance.OpenLoginPanel();
             }
         }
+    }
+    private void ShowRegistrationSuccessPanel(string displayName)
+    {
+        if (registrationSuccess != null)
+        {
+            registrationSuccessText.text = "Registration Successful Welcome " + displayName;
+            registrationSuccess.SetActive(true);
+            StartCoroutine(hideLoginFailedPanel(1.6f));
+        }
+    }
+
+    private void ShowRegistFailedPanel(string errorMessage)
+    {
+        if (registFailedPanel != null)
+        {
+            registFailedText.text = errorMessage;
+            registFailedPanel.SetActive(true);
+
+            StartCoroutine(hideLoginFailedPanel(1.6f));
+        }
+    }
+
+
+    private void ShowLoginFailedPanel(string errorMessage)
+    {
+        if (loginFailedPanel != null)
+        {
+            loginFailedText.text = errorMessage;
+            loginFailedPanel.SetActive(true);
+
+            StartCoroutine(hideLoginFailedPanel(1.6f));
+        }
+    }
+
+    private IEnumerator hideLoginFailedPanel(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (loginFailedPanel && registrationSuccess && registFailedPanel != null)
+        {
+            loginFailedPanel.SetActive(false);
+            registrationSuccess.SetActive(false);
+            registFailedPanel.SetActive(false);
+        }
+
     }
 
     private void SaveUserData(string userId, string userName, string userEmail)
@@ -315,7 +382,10 @@ public class FirebaseAuthManager : MonoBehaviour
             }
         });
     }
+
 }
+
+
 [System.Serializable]
 public class User
 {

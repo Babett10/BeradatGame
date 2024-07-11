@@ -19,6 +19,8 @@ public class ImageLoader : MonoBehaviour
     public TextMeshProUGUI deskripsiAsal; // TMP untuk asal di panel deskripsi
     public TextMeshProUGUI deskripsiSejarah; // TMP untuk sejarah di panel deskripsi
     public TextMeshProUGUI deskripsiDeskripsi; // TMP untuk deskripsi di panel deskripsi
+    public TextMeshProUGUI detailLaki;
+    public TextMeshProUGUI detailPerempuan;
     private DatabaseReference databaseReference;
 
     private List<GameObject> currentImages = new List<GameObject>(); // List to hold current displayed images
@@ -27,7 +29,7 @@ public class ImageLoader : MonoBehaviour
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
         yield return request.SendWebRequest();
-        if (request.isNetworkError || request.isHttpError)
+        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
         {
             Debug.Log(request.error);
         }
@@ -87,6 +89,8 @@ public class ImageLoader : MonoBehaviour
                     string asal = childSnapshot.Child("asal").Value.ToString();
                     string sejarah = childSnapshot.Child("sejarah").Value.ToString();
                     string deskripsi = childSnapshot.Child("detailPakaian").Value.ToString();
+                    string detailLk = childSnapshot.Child("detailPakaianLaki").Value.ToString();
+                    string detailPr = childSnapshot.Child("detailPakaianPerempuan").Value.ToString();
 
                     // Create a new prefab instance for each entry
                     GameObject newImage = Instantiate(imagePrefab, imageContainer);
@@ -120,7 +124,7 @@ public class ImageLoader : MonoBehaviour
                         if (button != null)
                         {
                             // Add click event to display description panel
-                            button.onClick.AddListener(() => ShowDescriptionPanel(imageUrl, name, asal, sejarah, deskripsi));
+                            button.onClick.AddListener(() => ShowDescriptionPanel(imageUrl, name, asal, sejarah, deskripsi, detailLk, detailPr));
                         }
                         else
                         {
@@ -157,6 +161,8 @@ public class ImageLoader : MonoBehaviour
             string asal = childSnapshot.Child("asal").Value.ToString();
             string sejarah = childSnapshot.Child("sejarah").Value.ToString();
             string deskripsi = childSnapshot.Child("detailPakaian").Value.ToString();
+            string detailLk = childSnapshot.Child("detailPakaianLaki").Value.ToString();
+            string detailPr = childSnapshot.Child("detailPakaianPerempuan").Value.ToString();
 
             // Create a new prefab instance for each entry
             GameObject newImage = Instantiate(imagePrefab, imageContainer);
@@ -190,7 +196,7 @@ public class ImageLoader : MonoBehaviour
                 if (button != null)
                 {
                     // Add click event to display description panel
-                    button.onClick.AddListener(() => ShowDescriptionPanel(imageUrl, name, asal, sejarah, deskripsi));
+                    button.onClick.AddListener(() => ShowDescriptionPanel(imageUrl, name, asal, sejarah, deskripsi, detailLk, detailPr));
                 }
                 else
                 {
@@ -204,7 +210,43 @@ public class ImageLoader : MonoBehaviour
         }
     }
 
-    void ShowDescriptionPanel(string imageUrl, string name, string asal, string sejarah, string deskripsi)
+    public void LoadStageInformation(int stage)
+    {
+        // Format key sesuai dengan struktur database Anda
+        string stageKey = "BajuAdat/BajuAdat" + stage.ToString();
+
+        databaseReference.Child(stageKey).GetValueAsync().ContinueWithOnMainThread(dbTask =>
+        {
+            if (dbTask.IsCompleted)
+            {
+                DataSnapshot snapshot = dbTask.Result;
+                if (snapshot.Exists)
+                {
+                    string imageUrl = snapshot.Child("imageUrl").Value.ToString();
+                    string name = snapshot.Child("name").Value.ToString();
+                    string asal = snapshot.Child("asal").Value.ToString();
+                    string sejarah = snapshot.Child("sejarah").Value.ToString();
+                    string deskripsi = snapshot.Child("detailPakaian").Value.ToString();
+                    string detailLk = snapshot.Child("detailPakaianLaki").Value.ToString();
+                    string detailPr = snapshot.Child("detailPakaianPerempuan").Value.ToString();
+
+                    // Menampilkan informasi pada panel
+                    ShowDescriptionPanel(imageUrl, name, asal, sejarah, deskripsi, detailLk, detailPr);
+                }
+                else
+                {
+                    Debug.LogError("Data snapshot tidak ditemukan untuk stage " + stage);
+                }
+            }
+            else
+            {
+                Debug.LogError(dbTask.Exception);
+            }
+        });
+    }
+
+
+    void ShowDescriptionPanel(string imageUrl, string name, string asal, string sejarah, string deskripsi, string detailPakaianLaki, string detailPakaianPerempuan)
     {
         // Show the description panel
         panelDeskripsi.SetActive(true);
@@ -217,5 +259,7 @@ public class ImageLoader : MonoBehaviour
         deskripsiAsal.text = asal;
         deskripsiSejarah.text = sejarah;
         deskripsiDeskripsi.text = deskripsi;
+        detailLaki.text = detailPakaianLaki;
+        detailPerempuan.text = detailPakaianPerempuan;
     }
 }

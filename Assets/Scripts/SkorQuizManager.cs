@@ -11,15 +11,17 @@ public class SkorQuizManager : MonoBehaviour
     public TMP_Text skor_T, ranking_T;
     public DatabaseReference databaseReference;
     private string userId;
+    private string userName;
     private void Start()
     {
         databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
         userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+        userName = FirebaseAuth.DefaultInstance.CurrentUser.DisplayName;
 
         skor_T.text = quiz.skor.ToString();
         string ranking = CalculateRanking(quiz.skor);
         ranking_T.text = ranking;
-        SaveScore(userId, quiz.skor, ranking);
+        SaveScore(userId, quiz.skor, ranking, userName);
     }
 
     private string CalculateRanking(int score)
@@ -42,9 +44,9 @@ public class SkorQuizManager : MonoBehaviour
         }
     }
 
-    public void SaveScore(string userId, int score, string ranking)
+    public void SaveScore(string userId, int score, string ranking, string userName)
     {
-        ScoreData scoreData = new ScoreData(score, ranking);
+        ScoreData scoreData = new ScoreData(score, ranking, userName);
         string json = JsonUtility.ToJson(scoreData);
 
         databaseReference.Child("scores").Child(userId).SetValueAsync(json).ContinueWith(task =>
@@ -66,9 +68,11 @@ public class ScoreData
 {
     public int score;
     public string ranking;
+    public string userName;
 
-    public ScoreData(int score, string ranking)
+    public ScoreData(int score, string ranking, string userName)
     {
+        this.userName = userName;
         this.score = score;
         this.ranking = ranking;
     }

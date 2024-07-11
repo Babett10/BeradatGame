@@ -13,8 +13,24 @@ public class QuizManager : MonoBehaviour
     public int skor = 0, quizterjawab = 0;
     public enum QuizType { PilihanGanda, TebakGambar }
     public QuizType[] quizTypes;
-
     public string[] kunciJawaban;
+
+    [SerializeField]
+    private Transform[] pictures;
+
+    public static bool puzzleWin = false;
+
+    void OnEnable()
+    {
+        // Reset puzzleWin ketika script diaktifkan kembali
+        puzzleWin = false;
+    }
+
+    void Start()
+    {
+        // Reset puzzleWin ketika script dimulai
+        puzzleWin = false;
+    }
 
     public int Nomor()
     {
@@ -28,6 +44,7 @@ public class QuizManager : MonoBehaviour
         }
         return a;
     }
+
     public void jawab(GameObject tombol)
     {
         for (int i = 0; i < tombol.transform.parent.childCount; i++)
@@ -77,6 +94,37 @@ public class QuizManager : MonoBehaviour
     void Update()
     {
         skor_T.text = "Skor : " + skor;
-        terjawab_T.text = "Soal : " + quizterjawab + " / 5";
+        terjawab_T.text = "Soal : " + quizterjawab + " / 6";
+
+    }
+
+    public void CheckPuzzleCompletion()
+    {
+        if (puzzleWin) return; // Jika puzzle sudah dimenangkan, tidak perlu melakukan pengecekan lagi
+
+        foreach (var picture in pictures)
+        {
+            if (!IsCorrectRotation(picture))
+            {
+                Debug.Log($"{picture.name} is not correctly rotated.");
+                return; // Keluar dari fungsi jika ada gambar yang tidak benar rotasinya
+            }
+        }
+
+        // Jika semua gambar sudah benar, maka puzzle dimenangkan
+        Debug.Log("All pieces are correctly rotated.");
+        puzzleWin = true;
+        quizterjawab++;
+        skor += 20;
+        quizBenar.Play();
+        FeedbackGambarBenar.SetActive(true);
+        StartCoroutine(tutupQuiz());
+    }
+
+    // Fungsi untuk memeriksa apakah rotasi gambar adalah 0
+    private bool IsCorrectRotation(Transform picture)
+    {
+        // Anda bisa memodifikasi kondisi ini jika rotasi yang benar bukan 0
+        return Mathf.Approximately(picture.rotation.eulerAngles.z, 0);
     }
 }

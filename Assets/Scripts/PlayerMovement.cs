@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
 {
-
     public float speed = 7f; // Kecepatan karakter
     public float jumpForce = 12f; //Tinggi lompat
     private int maxJumps = 2; //max lompat
@@ -14,13 +15,13 @@ public class PlayerMovement : MonoBehaviour
     private bool isPaused, infoActive, isWin = false;
 
     public GameObject QuizPanel;
+    public Button buttonJump;
     public AudioSource source;
     public AudioClip jumpClip, startClip;
 
     private enum MovementState { idle, running, jumping, falling, doubleJump }
 
     [SerializeField] private LayerMask JumpableGround;
-
 
     private Animator anim;
     private BoxCollider2D coll;
@@ -35,9 +36,7 @@ public class PlayerMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         _jumping = maxJumps;
         startSound();
-
     }
-
 
     void Update()
     {
@@ -48,12 +47,10 @@ public class PlayerMovement : MonoBehaviour
             _jumping = maxJumps;
         }
 
-        if (Input.GetButtonDown("Jump") && _jumping > 0)
+        if (Input.GetButtonDown("Jump"))
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            _jumping -= 1;
-            Debug.Log("lompat =" + _jumping);
-            jumpSound();
+            Jump();
+            Debug.Log("Lompat = " + _jumping);
         }
 
         moveInput = Input.GetAxisRaw("Horizontal");
@@ -62,11 +59,28 @@ public class PlayerMovement : MonoBehaviour
         UpdateAnimationState();
     }
 
+    public void SetMoveInput(float input)
+    {
+
+        moveInput = input;
+    }
+
+    public void Jump()
+    {
+        if (_jumping > 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            _jumping -= 1;
+            Debug.Log("Lompat = " + _jumping);
+            jumpSound();
+        }
+    }
 
     public void jumpSound()
     {
         source.PlayOneShot(jumpClip);
     }
+
     public void startSound()
     {
         source.PlayOneShot(startClip);
@@ -79,7 +93,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void setPausedStatus(bool status)
     {
-
         isPaused = status;
     }
 
@@ -93,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
         isWin = status;
     }
 
-    private void UpdateAnimationState() //Animasi
+    private void UpdateAnimationState()
     {
         MovementState state;
 
@@ -116,12 +129,10 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.jumping;
         }
-
         else if (rb.velocity.y > .1f && _jumping == 0)
         {
             state = MovementState.doubleJump;
         }
-
 
         if (rb.velocity.y < -.1f)
         {
@@ -148,4 +159,3 @@ public class PlayerMovement : MonoBehaviour
         return false;
     }
 }
-
