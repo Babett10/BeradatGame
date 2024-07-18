@@ -2,26 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
     private bool isPaused = false;
     public GameObject pausePanel;
-    // public GameObject orangeText;
-
     public PlayerMovement playerMovement;
-
-
-    // [SerializeField] Text wintotalOrangesText;
-    // [SerializeField] Text losetotalOrangesText;
-
-
-    private void Start()
-    {
-
-    }
 
     private void Update()
     {
@@ -44,8 +30,6 @@ public class GameManager : MonoBehaviour
         isPaused = true;
         playerMovement.setPausedStatus(true);
         pausePanel.SetActive(true);
-        // orangeText.SetActive(false); // Aktifkan panel pause
-        // Tambahkan logika lain yang relevan saat permainan di-pause
     }
 
     public void OpenPauseSetting()
@@ -68,8 +52,6 @@ public class GameManager : MonoBehaviour
         isPaused = false;
         playerMovement.setPausedStatus(false);
         pausePanel.SetActive(false);
-        // orangeText.SetActive(true); // Nonaktifkan panel pause
-        // Tambahkan logika lain yang relevan saat permainan dilanjutkan
     }
 
 
@@ -91,7 +73,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
-
 
 
 }

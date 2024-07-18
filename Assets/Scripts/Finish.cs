@@ -31,7 +31,6 @@ public class Finish : MonoBehaviour
         SaveStageCompletion();
         WinPanel.SetActive(true);
     }
-
     void SaveStageCompletion()
     {
         string currentSceneName = SceneManager.GetActiveScene().name;

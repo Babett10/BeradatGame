@@ -12,19 +12,31 @@ public class SkorQuizManager : MonoBehaviour
     public DatabaseReference databaseReference;
     private string userId;
     private string userName;
+    public int currentStage; // Gunakan currentStage dari ItemCollector
+
     private void Start()
     {
         databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-        userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
-        userName = FirebaseAuth.DefaultInstance.CurrentUser.DisplayName;
+        FirebaseUser user = FirebaseAuth.DefaultInstance.CurrentUser;
+        if (user != null)
+        {
+            userId = user.UserId;
+            userName = user.DisplayName;
 
-        skor_T.text = quiz.skor.ToString();
-        string ranking = CalculateRanking(quiz.skor);
-        ranking_T.text = ranking;
-        SaveScore(userId, quiz.skor, ranking, userName);
+            skor_T.text = quiz.skor.ToString();
+            string ranking = CalculateRanking(quiz.skor);
+            ranking_T.text = ranking;
+
+            string stageName = "stage" + currentStage; // Ubah currentStage menjadi string stageName
+            SaveScore(userId, quiz.skor, ranking, userName, stageName);
+        }
+        else
+        {
+            Debug.LogError("User is not authenticated.");
+        }
     }
 
-    private string CalculateRanking(int score)
+    public string CalculateRanking(int score)
     {
         if (score > 80)
         {
@@ -44,12 +56,12 @@ public class SkorQuizManager : MonoBehaviour
         }
     }
 
-    public void SaveScore(string userId, int score, string ranking, string userName)
+    public void SaveScore(string userId, int score, string ranking, string userName, string stage)
     {
-        ScoreData scoreData = new ScoreData(score, ranking, userName);
-        string json = JsonUtility.ToJson(scoreData);
+        ScoreData scoreData = new ScoreData(score, ranking, userName, stage);
+        string scoreJson = JsonUtility.ToJson(scoreData);
 
-        databaseReference.Child("scores").Child(userId).SetValueAsync(json).ContinueWith(task =>
+        databaseReference.Child("progress").Child("users").Child(userId).Child(stage).Child("scores").SetRawJsonValueAsync(scoreJson).ContinueWith(task =>
         {
             if (task.IsCompleted)
             {
@@ -69,11 +81,13 @@ public class ScoreData
     public int score;
     public string ranking;
     public string userName;
+    public string stage;
 
-    public ScoreData(int score, string ranking, string userName)
+    public ScoreData(int score, string ranking, string userName, string stage)
     {
         this.userName = userName;
         this.score = score;
         this.ranking = ranking;
+        this.stage = stage;
     }
 }

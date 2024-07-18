@@ -70,14 +70,13 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        CreateInstance();
-    }
-
-    private void CreateInstance()
-    {
         if (Instance == null)
         {
             Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -130,8 +129,6 @@ public class UIManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
-
-
 
     public void QuitApplication()
     {

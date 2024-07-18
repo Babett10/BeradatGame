@@ -38,8 +38,6 @@ public class FirebaseAuthManager : MonoBehaviour
     public TMP_Text registrationSuccessText;
     public TMP_Text registFailedText;
 
-
-
     private void Start()
     {
         StartCoroutine(CheckAndFixDependenciesAsync());
@@ -67,7 +65,7 @@ public class FirebaseAuthManager : MonoBehaviour
 
     void InitializeFirebase()
     {
-        //Set the default instance object
+        // Set the default instance object
         auth = FirebaseAuth.DefaultInstance;
         databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
 
@@ -104,7 +102,6 @@ public class FirebaseAuthManager : MonoBehaviour
         }
     }
 
-
     // Track state changes of the auth object.
     void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
@@ -117,7 +114,6 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.Log("Signed out " + user.UserId);
                 UIManager.Instance.OpenAuthPanel();
                 ClearLoginInputFieldText();
-
             }
 
             user = auth.CurrentUser;
@@ -161,7 +157,6 @@ public class FirebaseAuthManager : MonoBehaviour
             FirebaseException firebaseException = loginTask.Exception.GetBaseException() as FirebaseException;
             AuthError authError = (AuthError)firebaseException.ErrorCode;
 
-
             string failedMessage = "Login Failed! Because ";
 
             switch (authError)
@@ -190,7 +185,6 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             AuthResult authResult = loginTask.Result;
             user = authResult.User;
-
 
             Debug.LogFormat("{0} You Are Successfully Logged In", user.DisplayName);
 
@@ -286,7 +280,6 @@ public class FirebaseAuthManager : MonoBehaviour
                 FirebaseException firebaseException = updateProfileTask.Exception.GetBaseException() as FirebaseException;
                 AuthError authError = (AuthError)firebaseException.ErrorCode;
 
-
                 string failedMessage = "Profile update Failed! Becuase ";
                 switch (authError)
                 {
@@ -319,82 +312,98 @@ public class FirebaseAuthManager : MonoBehaviour
             }
         }
     }
+
     private void ShowRegistrationSuccessPanel(string displayName)
     {
         if (registrationSuccess != null)
         {
             registrationSuccessText.text = "Registration Successful Welcome " + displayName;
             registrationSuccess.SetActive(true);
-            StartCoroutine(hideLoginFailedPanel(1.6f));
+            StartCoroutine(CloseRegistrationSuccessPanel());
         }
     }
 
-    private void ShowRegistFailedPanel(string errorMessage)
+    private IEnumerator CloseRegistrationSuccessPanel()
+    {
+        yield return new WaitForSeconds(2f);
+        if (registrationSuccess != null)
+        {
+            registrationSuccess.SetActive(false);
+        }
+    }
+
+    private void ShowRegistFailedPanel(string text)
     {
         if (registFailedPanel != null)
         {
-            registFailedText.text = errorMessage;
+            registFailedText.text = text;
             registFailedPanel.SetActive(true);
-
-            StartCoroutine(hideLoginFailedPanel(1.6f));
+            StartCoroutine(CloseRegistFailedPanel());
         }
     }
 
+    private IEnumerator CloseRegistFailedPanel()
+    {
+        yield return new WaitForSeconds(2f);
+        if (registFailedPanel != null)
+        {
+            registFailedPanel.SetActive(false);
+        }
+    }
 
-    private void ShowLoginFailedPanel(string errorMessage)
+    private void ShowLoginFailedPanel(string text)
     {
         if (loginFailedPanel != null)
         {
-            loginFailedText.text = errorMessage;
+            loginFailedText.text = text;
             loginFailedPanel.SetActive(true);
-
-            StartCoroutine(hideLoginFailedPanel(1.6f));
+            StartCoroutine(CloseLoginFailedPanel());
         }
     }
 
-    private IEnumerator hideLoginFailedPanel(float delay)
+    private IEnumerator CloseLoginFailedPanel()
     {
-        yield return new WaitForSeconds(delay);
-
-        if (loginFailedPanel && registrationSuccess && registFailedPanel != null)
+        yield return new WaitForSeconds(2f);
+        if (loginFailedPanel != null)
         {
             loginFailedPanel.SetActive(false);
-            registrationSuccess.SetActive(false);
-            registFailedPanel.SetActive(false);
         }
-
     }
 
-    private void SaveUserData(string userId, string userName, string userEmail)
+    private void SaveUserData(string userId, string userName, string email)
     {
-        User newUser = new User(userName, userEmail);
+        // Create a new user object
+        User newUser = new User
+        {
+            userId = userId,
+            userName = userName,
+            email = email,
+            // Tambahkan properti lain jika diperlukan
+        };
+
+        // Serialize user object to JSON
         string json = JsonUtility.ToJson(newUser);
 
+        // Write user data to Firebase Realtime Database
         databaseReference.Child("users").Child(userId).SetRawJsonValueAsync(json).ContinueWith(task =>
         {
-            if (task.IsCompleted)
+            if (task.IsFaulted)
             {
-                Debug.Log("User data saved successfully.");
+                Debug.LogError("Failed to save user data to Firebase Database: " + task.Exception);
             }
             else
             {
-                Debug.LogError("Failed to save user data : " + task.Exception);
+                Debug.Log("User data saved successfully to Firebase Database");
             }
         });
     }
-
 }
 
-
-[System.Serializable]
+// User class definition
 public class User
 {
+    public string userId;
     public string userName;
-    public string userEmail;
-
-    public User(string userName, string userEmail)
-    {
-        this.userName = userName;
-        this.userEmail = userEmail;
-    }
+    public string email;
+    // Tambahkan properti lain jika diperlukan
 }
