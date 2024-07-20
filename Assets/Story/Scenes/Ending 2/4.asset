@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
+  m_Name: 4
+  m_EditorClassIdentifier: 
+  sentences:
+  - text: Putri Apsari senang sekali. Makanan seperti itu belum pernah dinikmatinya
+      selama ia berada di Istana
+    audio: {fileID: 0}
+    speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
+    actions: []
+    music: {fileID: 0}
+    sound: {fileID: 0}
+  - text: Setelah menikmati makanannya. Lalu, Sang Putri memejamkan matanya, tidak
+      disangka sang putri memindahkan separuh kecantikannya kepada Sewidak Loro sebagai
+      imbalannya.
+    audio: {fileID: 0}
+    speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
+    actions: []
+    music: {fileID: 0}
+    sound: {fileID: 0}
+  background: {fileID: 21300000, guid: daa280a4ace066d44b04513e533b8b93, type: 3}
+  nextScene: {fileID: 11400000, guid: acbda0fb6e6ba5e4db7ddccb9e13c427, type: 2}

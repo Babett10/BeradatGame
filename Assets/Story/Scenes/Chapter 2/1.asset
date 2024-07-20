@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
+  m_Name: 1
+  m_EditorClassIdentifier: 
+  sentences:
+  - text: 'Ibu menatap Suwidak Loro dengan mata penuh kasih dan senyum lembut yang
+      menenangkan. '
+    audio: {fileID: 0}
+    speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
+    actions: []
+    music: {fileID: 8300000, guid: c90bbda81fc61b64096dab173e188461, type: 3}
+    sound: {fileID: 0}
+  - text: Sosoknya memancarkan ketenangan, seakan-akan segala masalah bisa diatasi
+      dengan cinta dan yang ia miliki.
+    audio: {fileID: 0}
+    speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
+    actions: []
+    music: {fileID: 0}
+    sound: {fileID: 0}
+  - text: 'Ia selalu tahu bagaimana membuat putrinya merasa berharga, dengan kata-kata
+      bijak. '
+    audio: {fileID: 0}
+    speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
+    actions: []
+    music: {fileID: 0}
+    sound: {fileID: 0}
+  - text: Setiap hari, Suwidak Loro selalu membantu Ibunya mencari daun jati dan
+      ranting kayu untuk dijual ke pasar. Setiap hari pula Sang Ibu menyiapkan nasi
+      hangat dan sambal tempe untuk Suwidak Loro.
+    audio: {fileID: 0}
+    speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
+    actions: []
+    music: {fileID: 0}
+    sound: {fileID: 0}
+  background: {fileID: 21300000, guid: f5d01172bc566e84987ad1405919d0e2, type: 3}
+  nextScene: {fileID: 11400000, guid: fe6daea3b2b89fe46ba2ae5302797314, type: 2}
