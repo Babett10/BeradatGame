@@ -8,7 +8,9 @@ public class Finish : MonoBehaviour
 {
     private AudioSource finishSound;
     public GameObject WinPanel;
+    public GameObject losePanel;
     public PlayerMovement playerMovement;
+    public SkorQuizManager skorQuizManager; // Reference to SkorQuizManager
 
     void Start()
     {
@@ -28,9 +30,19 @@ public class Finish : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         playerMovement.setWinStatus(true);
-        SaveStageCompletion();
-        WinPanel.SetActive(true);
+        int playerScore = skorQuizManager.GetScore();
+        if (playerScore > 40)
+        {
+            SaveStageCompletion();
+            WinPanel.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("Score is too low to complete the stage.");
+            losePanel.SetActive(true);
+        }
     }
+
     void SaveStageCompletion()
     {
         string currentSceneName = SceneManager.GetActiveScene().name;

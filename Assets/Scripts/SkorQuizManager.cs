@@ -52,7 +52,7 @@ public class SkorQuizManager : MonoBehaviour
         }
         else
         {
-            return "Belajar Lagi Ya";
+            return "Nilai Kamu Terlalu Rendah, Silahkan Coba lagi :(";
         }
     }
 
@@ -72,6 +72,11 @@ public class SkorQuizManager : MonoBehaviour
                 Debug.LogError("Failed to save score and ranking: " + task.Exception);
             }
         });
+    }
+
+    public int GetScore()
+    {
+        return quiz.skor;
     }
 }
 

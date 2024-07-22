@@ -397,6 +397,18 @@ public class FirebaseAuthManager : MonoBehaviour
             }
         });
     }
+    public void ResetPlayerPrefs()
+    {
+        // Hapus semua PlayerPrefs
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+
+        // Set stage 1 agar terbuka
+        PlayerPrefs.SetInt("Stage1", 1);
+        PlayerPrefs.Save();
+
+        Debug.Log("All stages have been reset. Only Stage 1 is unlocked.");
+    }
 }
 
 // User class definition
