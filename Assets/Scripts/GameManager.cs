@@ -1,78 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private bool isPaused = false;
-    public GameObject pausePanel;
-    public PlayerMovement playerMovement;
+    private static GameManager instance;
+    public static GameManager Instance { get { return instance; } }
 
-    private void Update()
+    void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (instance != null && instance != this)
         {
-            if (isPaused)
-            {
-                ResumeGame();
-            }
-            else
-            {
-                Pause();
-            }
+            Destroy(this.gameObject);
         }
-
-    }
-
-    private void Pause()
-    {
-        isPaused = true;
-        playerMovement.setPausedStatus(true);
-        pausePanel.SetActive(true);
-    }
-
-    public void OpenPauseSetting()
-    {
-        if (!isPaused)
+        else
         {
-            Pause();
+            instance = this;
+            DontDestroyOnLoad(this.gameObject); // Objek ini tidak akan dihancurkan saat memuat scene lain
+        }
+    }
+    void Start()
+    {
+        // Pastikan chapter pertama selalu terbuka
+        if (!PlayerPrefs.HasKey("Chapter0Completed"))
+        {
+            PlayerPrefs.SetInt("Chapter0Completed", 1);
         }
     }
 
-    public void CloseInfoPanel(GameObject panel)
+    public void SetChapterCompletion(int chapterNumber, bool isCompleted)
     {
-        panel.SetActive(false);
-        playerMovement.infoPanelActive(false);
+        PlayerPrefs.SetInt("Chapter" + chapterNumber + "Completed", isCompleted ? 1 : 0);
+        Debug.Log("Set Chapter " + chapterNumber + " completion to " + (isCompleted ? "true" : "false"));
     }
 
-    public void ResumeGame()
+    public bool IsChapterCompleted(int chapterNumber)
     {
-        Time.timeScale = 1f;
-        isPaused = false;
-        playerMovement.setPausedStatus(false);
-        pausePanel.SetActive(false);
+        bool isCompleted = PlayerPrefs.GetInt("Chapter" + chapterNumber + "Completed", 0) == 1;
+        Debug.Log("Chapter " + chapterNumber + " completed: " + isCompleted);
+        return isCompleted;
     }
-
-
-    public void RestartGame()
-    {
-        Time.timeScale = 1f;
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(currentSceneName);
-    }
-
-    public void mainMenu()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(0);
-    }
-
-    public void NextLevel()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
-
-
 }
+
+
+

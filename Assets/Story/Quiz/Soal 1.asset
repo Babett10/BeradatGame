@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f913edee90c96245813b80842f1ac0b, type: 3}
+  m_Name: Soal 1
+  m_EditorClassIdentifier: 
+  questions:
+  - question: Siapa Suwidak Loro?
+    options:
+    - text: Anak perempuan berwajah cantik
+      isCorrect: 0
+    - text: Anak perempuan berwajah Jelek
+      isCorrect: 1
+    - text: Anak Laki - laki berwajah cantik
+      isCorrect: 0
+  - question: Suwidak Loro merupakan cerita rakyat yang berasal dari daerah?
+    options:
+    - text: Jawa Timur
+      isCorrect: 0
+    - text: Jawa Tengah
+      isCorrect: 1
+    - text: Jawa Barat
+      isCorrect: 0
+  - question: Suwidak Loro seringkali diolok-olok oleh temannya karena ia hanya memiliki?
+    options:
+    - text: 62 Helai Rambut
+      isCorrect: 1
+    - text: 65 Helai Rambut
+      isCorrect: 0
+    - text: 68 Helai Rambut
+      isCorrect: 0
+  - question: Bagaimana watak dari karakter Suwidak Loro?
+    options:
+    - text: Baik hati dan sayang ibunya
+      isCorrect: 1
+    - text: Tinggi hati dan sayang ibunya
+      isCorrect: 0
+    - text: 'Rendah diri dan sayang ibunya  '
+      isCorrect: 0
+  - question: Bagaimana watak dari karakter Sang Ibu?
+    options:
+    - text: Bijaksana dan menenangkan
+      isCorrect: 1
+    - text: Pemarah dan pendendam
+      isCorrect: 0
+    - text: Sombong dan iri hati
+      isCorrect: 0
+  nextSceneAfterQuiz: {fileID: 0}

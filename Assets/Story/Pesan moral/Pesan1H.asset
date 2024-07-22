@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c532fed5cb600d44e8f2278d8022f6e9, type: 3}
+  m_Name: Pesan1H
+  m_EditorClassIdentifier: 
+  sentences:
+  - text: Kasih sayang dan dukungan dari ibu Suwidak Loro membuatnya merasa percaya
+      diri dan berharga, menunjukkan pentingnya cinta keluarga saat menghadapi pendapat
+      orang lain. Kebaikan hati Suwidak Loro yang suka berbagi makanan dan peduli
+      pada binatang mengajarkan bahwa kebaikan itu datang dari hati, bukan dari penampilan.
+      Suwidak Loro dan ibunya bekerja keras dan bersyukur atas apa yang mereka miliki,
+      mengajarkan nilai-nilai kerja keras dan kesederhanaan.
+  nextScene: {fileID: 11400000, guid: b942c3f77bc11d64f99bc149d08f8d1d, type: 2}
+  previousScene: {fileID: 0}

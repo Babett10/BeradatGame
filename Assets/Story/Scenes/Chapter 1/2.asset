@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
+  m_Name: 2
+  m_EditorClassIdentifier: 
+  sentences:
+  - text: Kalau dihitung hanya ada 62 helai. Tidak bertambah dan tak berkurang. Alisnya
+      hanya selembar di kiri dan selembar di kanan.Penduduk desa selalu mencemooh
+      gadis itu dengan sebutan gadis terjelek di dunia.
+    audio: {fileID: 0}
+    speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
+    actions: []
+    music: {fileID: 0}
+    sound: {fileID: 0}
+  - text: Karena sering diejek, Suwidak Loro tidak mau keluar rumah. Ia hanya mengurung
+      diri di kamar.
+    audio: {fileID: 0}
+    speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
+    actions: []
+    music: {fileID: 0}
+    sound: {fileID: 0}
+  background: {fileID: 21300000, guid: f5d01172bc566e84987ad1405919d0e2, type: 3}
+  nextScene: {fileID: 11400000, guid: 8bd36554d5d025d4b9e61416e72d15da, type: 2}
