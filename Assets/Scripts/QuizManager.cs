@@ -94,7 +94,7 @@ public class QuizManager : MonoBehaviour
     void Update()
     {
         skor_T.text = "Skor : " + skor;
-        terjawab_T.text = "Soal : " + quizterjawab + " / 6";
+        terjawab_T.text = "Soal : " + quizterjawab + " / 5";
 
     }
 

@@ -23,6 +23,12 @@ public class FirebaseAuthManager : MonoBehaviour
     public InputField emailLoginField;
     public InputField passwordLoginField;
 
+    // Login Variables
+    [Space]
+    [Header("AdminLogin")]
+    public InputField adminemailLoginField;
+    public InputField adminpasswordLoginField;
+
     // Registration Variables
     [Space]
     [Header("Registration")]
@@ -194,6 +200,61 @@ public class FirebaseAuthManager : MonoBehaviour
             UIManager.Instance.OpenMainMenuPanel();
         }
     }
+
+    public void AdminLogin()
+{
+    Debug.Log("Starting AdminLogin");
+    StartCoroutine(AdminLoginAsync(adminemailLoginField.text, adminpasswordLoginField.text));
+}
+
+private IEnumerator AdminLoginAsync(string adminEmail, string adminPassword)
+{
+    Debug.Log("Attempting to login as admin with email: " + adminEmail);
+    var loginTask = auth.SignInWithEmailAndPasswordAsync(adminEmail, adminPassword);
+    yield return new WaitUntil(() => loginTask.IsCompleted);
+
+    if (loginTask.Exception != null)
+    {
+        Debug.LogError("Admin login failed: " + loginTask.Exception);
+        FirebaseException firebaseException = loginTask.Exception.GetBaseException() as FirebaseException;
+        AuthError authError = (AuthError)firebaseException.ErrorCode;
+
+        string failedMessage = "Admin Login Failed! Because ";
+    switch (authError)
+{
+    case AuthError.InvalidEmail:
+        failedMessage += "Email is invalid";
+        break;
+    case AuthError.WrongPassword:
+        failedMessage += "Wrong Password";
+        break;
+    case AuthError.MissingEmail:
+        failedMessage += "Email is missing";
+        break;
+    case AuthError.MissingPassword:
+        failedMessage += "Password is missing";
+        break;
+    default:
+        failedMessage = "Admin Login Failed due to unknown error";
+        break;
+}
+
+        Debug.Log(failedMessage);
+        ShowLoginFailedPanel(failedMessage);
+    }
+    else
+    {
+        Debug.Log("Admin login successful");
+        AuthResult authResult = loginTask.Result;
+        user = authResult.User;
+        Debug.LogFormat("{0} You Are Successfully Logged In as Admin", user.DisplayName);
+
+        References.userName = user.DisplayName;
+        SaveUserData(user.UserId, user.DisplayName, user.Email);
+        UIManager.Instance.OpenAdminMainMenuPanel();
+    }
+}
+
 
     public void Register()
     {

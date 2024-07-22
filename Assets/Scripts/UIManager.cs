@@ -18,6 +18,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private GameObject MainMenuPanel;
+    
+    [SerializeField]
+    private GameObject AdminMainMenuPanel;
 
     [SerializeField]
     private GameObject AuthPanel;
@@ -90,6 +93,11 @@ public class UIManager : MonoBehaviour
     public void OpenMainMenuPanel()
     {
         MainMenuPanel.SetActive(true);
+        AuthPanel.SetActive(false);
+    }
+    public void OpenAdminMainMenuPanel()
+    {
+        AdminMainMenuPanel.SetActive(true);
         AuthPanel.SetActive(false);
     }
 
