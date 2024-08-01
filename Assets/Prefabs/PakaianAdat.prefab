@@ -32,12 +32,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7603521216855921612}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 69.74011, y: 104.29854}
-  m_SizeDelta: {x: 256.1754, y: 334.9988}
+  m_SizeDelta: {x: 224.7459, y: 293.9034}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &330307119752897773
 CanvasRenderer:
@@ -149,7 +148,6 @@ RectTransform:
   - {fileID: 7319800972633403505}
   - {fileID: 9024152059945216030}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -187,12 +185,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7603521216855921612}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 68.777, y: -105.9309}
-  m_SizeDelta: {x: 254.25, y: 64.2742}
+  m_AnchoredPosition: {x: 69.74, y: -97.04654}
+  m_SizeDelta: {x: 254.25, y: 90.3673}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &404264225577063312
 CanvasRenderer:
@@ -222,7 +219,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Nama Pakaian Adat Sumtaera
+  m_text: Nama Pakaian Adat
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 933a95f4a9bc317458dab27763377396, type: 2}
   m_sharedMaterial: {fileID: -6804056885465627881, guid: 933a95f4a9bc317458dab27763377396, type: 2}
@@ -261,7 +258,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: -2.15
   m_wordSpacing: 0
-  m_lineSpacing: -65
+  m_lineSpacing: -50.25
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0

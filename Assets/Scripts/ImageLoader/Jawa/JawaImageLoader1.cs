@@ -9,7 +9,7 @@ using Firebase.Database;
 using TMPro;
 using System;
 
-public class ImageLoader : MonoBehaviour
+public class JawaImageLoader : MonoBehaviour
 {
     public GameObject imagePrefab; // Prefab with RawImage, TextMeshProUGUI, and Button component
     public Transform imageContainer; // Parent transform to hold images
@@ -76,7 +76,7 @@ public class ImageLoader : MonoBehaviour
         currentImages.Clear();
 
         // Retrieve image URLs and names from the database
-        databaseReference.Child("BajuAdat").Child("Sumatera").GetValueAsync().ContinueWithOnMainThread(dbTask =>
+        databaseReference.Child("BajuAdat").Child("Jawa").GetValueAsync().ContinueWithOnMainThread(dbTask =>
         {
             if (dbTask.IsCompleted)
             {
@@ -213,7 +213,7 @@ public class ImageLoader : MonoBehaviour
     public void LoadStageInformation(int stage)
     {
         // Format key sesuai dengan struktur database Anda
-        string stageKey = "BajuAdat/Sumatera/BajuAdat" + stage.ToString();
+        string stageKey = "BajuAdat/BajuAdat" + stage.ToString();
 
         databaseReference.Child(stageKey).GetValueAsync().ContinueWithOnMainThread(dbTask =>
         {
