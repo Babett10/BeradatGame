@@ -18,7 +18,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private GameObject MainMenuPanel;
-    
+
     [SerializeField]
     private GameObject AdminMainMenuPanel;
 
